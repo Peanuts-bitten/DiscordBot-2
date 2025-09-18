@@ -100,22 +100,6 @@ def callback():
             "is_owner": is_owner,
             "is_admin": is_admin,
             "is_mod": is_mod,
-            "is_hoster": is_hoster
+            "is_giveaway": is_giveaway
         }
     }
-
-    # 6. Update role connection metadata for the user
-    put_url = f"https://discord.com/api/v10/users/@me/applications/{CLIENT_ID}/role-connection"
-    put_resp = requests.put(put_url, json=metadata, headers={"Authorization": f"Bearer {user_token}"})
-
-    if put_resp.status_code not in (200, 204):
-        return f"Failed to update linked role metadata: {put_resp.status_code} {put_resp.text}", 500
-
-    return f"✅ Linked Role metadata updated for {user_info.get('username')}."
-
-# No need for the threading keep_alive, Render handles the web server.
-# Ensure your start command on Render is 'gunicorn app:app' or 'python app.py'
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-
