@@ -68,14 +68,13 @@ def callback():
     user_id = user_info.get("id")
 
     # 3. Fetch member roles from guild using bot token
-    # --- START OF REPLACED CODE ---
-    # Log the status of the environment variables before checking them
+    # --- START OF DIAGNOSTIC LOGGING ---
     print(f"DEBUG: BOT_TOKEN is set? {'Yes' if BOT_TOKEN else 'No'}")
     print(f"DEBUG: GUILD_ID is set? {'Yes' if GUILD_ID else 'No'}")
     
     if not BOT_TOKEN or not GUILD_ID:
         return "BOT_TOKEN or GUILD_ID missing in server config", 500
-    # --- END OF REPLACED CODE ---
+    # --- END OF DIAGNOSTIC LOGGING ---
 
     member_req = requests.get(
         f"https://discord.com/api/v10/guilds/{GUILD_ID}/members/{user_id}",
@@ -99,6 +98,7 @@ def callback():
     is_admin = any(r in user_role_names for r in ["🌸 ๖ۣMighty Children", "Server Manager", "Head administrator", "Administrator"])
     is_mod = any(r in user_role_names for r in ["Head Moderator", "Senior Moderator", "Moderator", "Junior Moderator"])
     is_hoster = "🎉 𝐆𝐢𝐯𝐞𝐚𝐰𝐚𝐲 𝐓𝐞𝐚𝐦" in user_role_names
+    is_giveaway = "🎉 𝐆𝐢𝐯𝐞𝐚𝐰𝐚𝐲 𝐓𝐞𝐚𝐦" in user_role_names # Bug fix: define is_giveaway
 
     metadata = {
         "platform_name": LINKED_ROLES_VERIFICATION_URL, # Use the correct platform name
@@ -106,15 +106,9 @@ def callback():
             "is_owner": is_owner,
             "is_admin": is_admin,
             "is_mod": is_mod,
-            # NOTE: There's an "is_giveaway" key here, but no is_giveaway variable.
-            # Make sure to define it based on your logic if needed.
+            "is_giveaway": is_giveaway
         }
     }
-    
-    # NOTE: There's a possible bug here where is_giveaway isn't defined.
-    # If this is intentional, ignore. Otherwise, you might want to uncomment
-    # a line like this:
-    # is_giveaway = "🎉 𝐆𝐢𝐯𝐞𝐚𝐰𝐚𝐲 𝐓𝐞𝐚𝐦" in user_role_names
 
     # 6. Update role connection metadata for the user
     put_url = f"https://discord.com/api/v10/users/@me/applications/{CLIENT_ID}/role-connection"
@@ -130,4 +124,3 @@ def callback():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-
