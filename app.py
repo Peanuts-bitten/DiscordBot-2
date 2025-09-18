@@ -92,7 +92,7 @@ def callback():
     is_owner = any(r in user_role_names for r in ["👑 Owner", "👑 Server Partner", "👑 Co Owner"])
     is_admin = any(r in user_role_names for r in ["🌸 ๖ۣMighty Children", "Server Manager", "Head administrator", "Administrator"])
     is_mod = any(r in user_role_names for r in ["Head Moderator", "Senior Moderator", "Moderator", "Junior Moderator"])
-    is_giveaway = "🎉 𝐆𝐢𝐯𝐞𝐚𝐰𝐚𝐲 𝐓𝐞𝐚𝐦" in user_role_names
+    is_hoster = "🎉 𝐆𝐢𝐯𝐞𝐚𝐰𝐚𝐲 𝐓𝐞𝐚𝐦" in user_role_names
 
     metadata = {
         "platform_name": LINKED_ROLES_VERIFICATION_URL, # Use the correct platform name
@@ -100,7 +100,7 @@ def callback():
             "is_owner": is_owner,
             "is_admin": is_admin,
             "is_mod": is_mod,
-            "is_giveaway": is_giveaway
+            "is_hoster": is_hoster
         }
     }
 
@@ -118,3 +118,4 @@ def callback():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
